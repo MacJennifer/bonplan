@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sorts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('place_id')->constrained('places');
-            $table->foreignId('categorie_id')->constrained('categories');
-            $table->timestamps();
+        Schema::table('places', function (Blueprint $table) {
+            $table->bigInteger('categorie_id')->unsigned();
+            $table->foreign('categorie_id')
+                ->references('id')
+                ->on('categories');
         });
     }
 
@@ -24,6 +24,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sorts');
+        Schema::table('places', function (Blueprint $table) {
+            //
+        });
     }
 };

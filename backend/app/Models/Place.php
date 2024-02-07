@@ -10,13 +10,13 @@ class Place extends Model
     use HasFactory;
     protected $fillable = ['image', 'adressPlaces', 'zipCodePlaces', 'phonePlaces', 'comment_id'];
 
-    public function sorts()
-    {
-        return $this->hasMany(Categorie::class);
-    }
 
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+    public function categories()
+    {
+        return $this->hasMany(Categorie::class);
     }
 }

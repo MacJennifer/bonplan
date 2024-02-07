@@ -11,8 +11,8 @@ class Categorie extends Model
 
     protected $fillable = ['nameCategories'];
 
-    public function sorts()
+    public function places()
     {
-        return $this->hasMany(Place::class);
+        return $this->belongsTo(Place::class);
     }
 }
