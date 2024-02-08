@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class CategorieController extends Controller
 {
@@ -38,8 +39,12 @@ class CategorieController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Categorie $categorie)
+    public function show($id)
     {
+        $categorie = DB::table('categories')
+            ->where('id', '=', $id)
+            ->get();
+
         return response()->json($categorie);
     }
 
@@ -63,9 +68,11 @@ class CategorieController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categorie $categorie)
+    public function destroy($id)
     {
-        $categorie->delete();
+
+        $category = Categorie::findOrFail($id);
+        $category->delete();
 
         return response()->json([
             'status' => 'Supprimer avec succès'
