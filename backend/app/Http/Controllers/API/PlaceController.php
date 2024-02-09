@@ -24,16 +24,31 @@ class PlaceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'required|max:255',
+            'namePlace' => 'required|max:100',
             'adressPlaces' => 'required|max:255',
             'zipCodePlaces' => 'required|max:50',
             'phonePlaces' => 'required|max:100',
 
         ]);
-        $place = Place::create($request->all());
+
+        $filename = "";
+        if ($request->hasFile('image')) {
+            $filenameWithExt = $request->file('image')->getClientOriginalName();
+            $filenameWithoutExt = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filename = $filenameWithoutExt . '_' . time() . '.' . $extension;
+            $request->file('image')->storeAs('public/uploads', $filename);
+        } else {
+            $filename = Null;
+        }
+
+
+
+        $place = Place::create(array_merge($request->all(), ['image' => $filename]));
 
         return response()->json([
             'status'  => 'Success',
+            'message' => 'Joueur ajouté avec succès',
             'data' => $place,
         ]);
     }
@@ -52,16 +67,30 @@ class PlaceController extends Controller
     public function update(Request $request, Place $place)
     {
         $request->validate([
-            'image' => 'required|max:255',
+            'namePlace' => 'required|max:100',
             'adressPlaces' => 'required|max:255',
             'zipCodePlaces' => 'required|max:50',
             'phonePlaces' => 'required|max:100',
 
         ]);
-        $place->update($request->all());
+
+        $filename = "";
+        if ($request->hasFile('image')) {
+            $filenameWithExt = $request->file('image')->getClientOriginalName();
+            $filenameWithoutExt = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filename = $filenameWithoutExt . '' . time() . '.' . $extension;
+            $path = $request->file('image')->storeAs('public/uploads', $filename);
+        } else {
+            $filename = Null;
+        }
+
+        $place->update(array_merge($request->all(), ['image' => $filename]));
 
         return response()->json([
             'status'  => 'Mise à jour avec succèss',
+            'message' => 'Mise à jour réussie',
+            'data' => $place,
 
         ]);
     }

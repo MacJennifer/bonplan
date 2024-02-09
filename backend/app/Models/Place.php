@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Place extends Model
 {
     use HasFactory;
-    protected $fillable = ['image', 'adressPlaces', 'zipCodePlaces', 'phonePlaces', 'comment_id', 'categorie_id'];
+    protected $fillable = ['namePlace', 'image', 'adressPlaces', 'zipCodePlaces', 'phonePlaces', 'comment_id', 'categorie_id'];
 
 
     public function comments()

@@ -11,24 +11,26 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function __construct()
+    protected $user;
+
+    public function __construct(User $user)
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->user = $user;
     }
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
+        $this->validate($request, [
+            'email' => 'required|string',
             'password' => 'required|string',
         ]);
+
         $token = auth()->attempt([
             'email' => $request->email,
             'password' => $request->password,
         ]);
 
         if ($token) {
-            $user = auth()->user();
             return response()->json([
                 'meta' => [
                     'code' => 200,
@@ -36,7 +38,7 @@ class AuthController extends Controller
                     'message' => 'Quote fetched successfully.',
                 ],
                 'data' => [
-                    'user' => $user,
+                    'user' => auth()->user(),
                     'access_token' => [
                         'token' => $token,
                         'type' => 'Bearer',
