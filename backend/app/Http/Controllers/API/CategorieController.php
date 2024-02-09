@@ -51,17 +51,14 @@ class CategorieController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Categorie $categorie)
+    public function update(Request $request, Categorie $categorie, $id)
     {
-        $request->validate([
-            'nameCategories' => 'required|max:50',
-
-        ]);
+        $categorie = Categorie::findOrFail($id);
         $categorie->update($request->all());
 
         return response()->json([
             'status'  => 'Success',
-            'data' => $categorie,
+
         ]);
     }
 

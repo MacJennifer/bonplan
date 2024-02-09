@@ -65,10 +65,13 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        $comment->delete();
+        try {
+            // Supprimez le commentaire
+            $comment->delete();
 
-        return response()->json([
-            'status' => 'Supprimer avec succès'
-        ]);
+            return response()->json(['status' => 'Commentaire supprimé avec succès'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'Erreur lors de la suppression du commentaire'], 500);
+        }
     }
 }

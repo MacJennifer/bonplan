@@ -58,7 +58,7 @@ class ArticleController extends Controller
 
         return response()->json([
             'status'  => 'Success',
-            'data' => $article,
+
         ]);
     }
 
