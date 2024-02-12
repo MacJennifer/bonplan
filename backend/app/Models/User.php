@@ -22,6 +22,8 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'role_id',
+
 
     ];
 
@@ -59,5 +61,13 @@ class User extends Authenticatable implements JWTSubject
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+    public function isAdmin()
+    {
+        return $this->role_id == 2;
     }
 }

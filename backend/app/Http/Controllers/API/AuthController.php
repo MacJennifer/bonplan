@@ -39,7 +39,7 @@ class AuthController extends Controller
                 ],
                 'data' => [
                     'user' => auth()->user(),
-                    'access_token' => [
+                    'auth' => [
                         'token' => $token,
                         'type' => 'Bearer',
                         'expires_in' => Auth::factory()->getTTL() * 3600,
@@ -60,6 +60,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role_id' => 1,
         ]);
 
         return response()->json([
