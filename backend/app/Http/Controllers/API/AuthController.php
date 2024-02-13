@@ -25,24 +25,29 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $token = auth()->attempt([
-            'email' => $request->email,
-            'password' => $request->password,
-        ]);
+        if ($token = auth()->attempt($request->only('email', 'password'))) {
+            $user = auth()->user();
 
-        if ($token) {
+            //On intégre le role_id dans le token
+            $customClaims = ['role_id' => $user->role_id];
+
+            // Générer le token avec les réclamations personnalisées
+            $token = Auth::claims($customClaims)->attempt($request->only('email', 'password'));
+
+
             return response()->json([
                 'meta' => [
                     'code' => 200,
                     'status' => 'success',
-                    'message' => 'Quote fetched successfully.',
+                    'message' => 'User authenticated successfully.',
                 ],
                 'data' => [
-                    'user' => auth()->user(),
+                    'user' => $user,
                     'auth' => [
                         'token' => $token,
                         'type' => 'Bearer',
-                        'expires_in' => Auth::factory()->getTTL() * 3600,
+                        'expires_in' => Auth::factory()->getTTL() * 60,
+                        'role_id' => $user->role_id,
                     ],
                 ],
             ]);
